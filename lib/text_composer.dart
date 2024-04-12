@@ -13,7 +13,7 @@ class TextComposer extends StatefulWidget {
 }
 
 class _TextComposerState extends State<TextComposer> {
-  TextEditingController _textController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
   bool _isComposing = false;
 
   void _reset() {
@@ -26,7 +26,7 @@ class _TextComposerState extends State<TextComposer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
           IconButton(
@@ -39,12 +39,12 @@ class _TextComposerState extends State<TextComposer> {
                 File fileSend = File(imgFile.path);
                 widget.sendMessage(imgFile: fileSend);
               },
-              icon: Icon(Icons.photo_camera)),
+              icon: const Icon(Icons.photo_camera)),
           Expanded(
             child: TextField(
               controller: _textController,
               decoration:
-                  InputDecoration.collapsed(hintText: 'Enviar Messagem'),
+                  const InputDecoration.collapsed(hintText: 'Enviar Mensagem'),
               onChanged: (text) {
                 setState(() {
                   _isComposing = text.isNotEmpty;
@@ -64,7 +64,7 @@ class _TextComposerState extends State<TextComposer> {
                     _reset();
                   }
                 : null,
-            icon: Icon(Icons.send),
+            icon: const Icon(Icons.send),
           ),
         ],
       ),

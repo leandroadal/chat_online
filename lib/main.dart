@@ -1,5 +1,4 @@
 import 'package:chat_online/chat_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -11,14 +10,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MainApp());
-
-  final db = FirebaseFirestore.instance;
-
-  final express = <String, dynamic>{
-    'text': 'Olá Mundo!',
-    'from': 'Leandro',
-    'read': false
-  };
 
   /*
   db.collection('messages').doc().set(express);
@@ -38,13 +29,13 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: ChatScreen(),
+        home: const ChatScreen(),
         theme: ThemeData(
           primaryColor: Colors.blue,
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
             color: Colors.blue,
           ),
-          iconTheme: IconThemeData(
+          iconTheme: const IconThemeData(
             color: Colors.blue,
           ),
         ));

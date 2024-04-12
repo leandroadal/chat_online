@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat_online/chat_message.dart';
 import 'package:chat_online/text_composer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -21,12 +22,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
   User? _currentUser;
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
 
     FirebaseAuth.instance.authStateChanges().listen((user) {
-      _currentUser = user;
+      setState(() {
+        _currentUser = user;
+      });
     });
   }
 
@@ -72,6 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
         "uid": user!.uid,
         "senderName": user.displayName,
         "senderPhotoUrl": user.photoURL,
+        'time': Timestamp.now(),
       };
       //FirebaseFirestore.instance.collection('messages').add({
       //'text': message,
@@ -82,12 +88,23 @@ class _ChatScreenState extends State<ChatScreen> {
       if (imgFile != null) {
         UploadTask task = FirebaseStorage.instance
             .ref()
-            .child(DateTime.now().millisecondsSinceEpoch.toString())
+            .child(user.uid +
+                DateTime.now()
+                    .millisecondsSinceEpoch
+                    .toString()) // adiciona o id do usuário para evirar imagens com mesmo nome
             .putFile(imgFile);
+
+        setState(() {
+          _isLoading = true;
+        });
 
         TaskSnapshot taskSnapshot = await task;
         String url = await taskSnapshot.ref.getDownloadURL();
         data["imgUrl"] = url;
+
+        setState(() {
+          _isLoading = false;
+        });
       }
 
       if (message != null) {
@@ -103,16 +120,35 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(''),
+        title: Text(_currentUser != null
+            ? 'Olá, ${_currentUser?.displayName}'
+            : 'Chat'),
         elevation: 0,
         //backgroundColor: Colors.blue,
+        actions: [
+          _currentUser != null
+              ? IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    await googleSignIn.signOut();
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Voce saiu com sucesso!'),
+                      backgroundColor: Colors.red,
+                    ));
+                  },
+                )
+              : Container(),
+        ],
       ),
       body: Column(
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection('messages').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('messages')
+                  .orderBy('time')
+                  .snapshots(),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
@@ -128,11 +164,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemCount: documents.length,
                       reverse: true,
                       itemBuilder: (context, index) {
-                        final message =
+                        final messageData =
                             documents[index].data() as Map<String, dynamic>;
-                        final text = message['text'] ?? '';
-                        return ListTile(
-                          title: Text(text),
+                        final bool mine = messageData['uid'] ==
+                            FirebaseAuth.instance.currentUser?.uid;
+                        return ChatMessage(
+                          data: messageData,
+                          mine: mine,
                         );
                       },
                     );
@@ -140,6 +178,7 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
+          _isLoading ? const LinearProgressIndicator() : Container(),
           TextComposer(
             sendMessage: _sendMessage,
           ),

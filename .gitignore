@@ -44,3 +44,16 @@ app.*.map.json
 
 # VScode
 .vscode
+
+### Firebase ###
+.idea
+**/node_modules/*
+**/.firebaserc
+
+### Firebase Patch ###
+.runtimeconfig.json
+.firebase/
+android/app/google-services.json
+
+ios/Runner/GoogleService-Info.plist
+lib/firebase_options.dart

@@ -45,5 +45,26 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Descreva por que seu aplicativo precisa de permissão para a biblioteca de fotos.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Descreva por que seu aplicativo precisa de acesso à câmera.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Descreva por que seu aplicativo precisa de acesso ao microfone, se pretende gravar vídeos.</string>
+	<key>GIDClientID</key>
+	<string>210496758992-mjceuhiqnimi438cgi36qc59tm4e5g4b.apps.googleusercontent.com</string>
+	<key>GIDServerClientID</key>
+	<string>210496758992-mjceuhiqnimi438cgi36qc59tm4e5g4b.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.210496758992-mjceuhiqnimi438cgi36qc59tm4e5g4b</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

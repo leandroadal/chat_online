@@ -9,17 +9,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MainApp());
 
-  /*
-  db.collection('messages').doc().set(express);
-  //await Firebase.initializeApp();
-  FirebaseFirestore.instance.collection('messages').snapshots().listen((event) {
-    event.docs.forEach((element) {
-      print(element.data());
-    });
-  });
-  */
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {

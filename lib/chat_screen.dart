@@ -74,7 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ));
     } else {
       Map<String, dynamic> data = {
-        "uid": user!.uid,
+        "uid": user.uid,
         "senderName": user.displayName,
         "senderPhotoUrl": user.photoURL,
         'time': Timestamp.now(),
@@ -92,7 +92,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 DateTime.now()
                     .millisecondsSinceEpoch
                     .toString()) // adiciona o id do usuário para evirar imagens com mesmo nome
-            .putFile(imgFile);
+            .putFile(
+              imgFile,
+              SettableMetadata(contentType: 'image/jpeg'),
+            );
 
         setState(() {
           _isLoading = true;
